@@ -45,10 +45,16 @@ class Rentings
      */
     private $medium;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Users", inversedBy="rentings")
+     */
+    private $renter;
+
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
         $this->medium = new ArrayCollection();
+        $this->renter = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -149,6 +155,32 @@ class Rentings
             if ($medium->getRentings() === $this) {
                 $medium->setRentings(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Users[]
+     */
+    public function getRenter(): Collection
+    {
+        return $this->renter;
+    }
+
+    public function addRenter(Users $renter): self
+    {
+        if (!$this->renter->contains($renter)) {
+            $this->renter[] = $renter;
+        }
+
+        return $this;
+    }
+
+    public function removeRenter(Users $renter): self
+    {
+        if ($this->renter->contains($renter)) {
+            $this->renter->removeElement($renter);
         }
 
         return $this;
