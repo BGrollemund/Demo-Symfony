@@ -39,9 +39,15 @@ class Users
      */
     private $role;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Rentings", mappedBy="renter")
+     */
+    private $rentings;
+
     public function __construct()
     {
         $this->pdfsRenters = new ArrayCollection();
+        $this->rentings = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,6 +118,34 @@ class Users
     public function setRole(?Roles $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Rentings[]
+     */
+    public function getRentings(): Collection
+    {
+        return $this->rentings;
+    }
+
+    public function addRenting(Rentings $renting): self
+    {
+        if (!$this->rentings->contains($renting)) {
+            $this->rentings[] = $renting;
+            $renting->addRenter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRenting(Rentings $renting): self
+    {
+        if ($this->rentings->contains($renting)) {
+            $this->rentings->removeElement($renting);
+            $renting->removeRenter($this);
+        }
 
         return $this;
     }
