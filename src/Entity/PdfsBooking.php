@@ -26,6 +26,12 @@ class PdfsBooking
      */
     private $created_at;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Bookings", inversedBy="pdfsBookings")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $booking;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +57,18 @@ class PdfsBooking
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getBooking(): ?Bookings
+    {
+        return $this->booking;
+    }
+
+    public function setBooking(?Bookings $booking): self
+    {
+        $this->booking = $booking;
 
         return $this;
     }

@@ -26,6 +26,12 @@ class PdfsRenter
      */
     private $created_at;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="pdfsRenters")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $renter;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +57,18 @@ class PdfsRenter
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getRenter(): ?Users
+    {
+        return $this->renter;
+    }
+
+    public function setRenter(?Users $renter): self
+    {
+        $this->renter = $renter;
 
         return $this;
     }

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +27,22 @@ class Users
      * @ORM\Column(type="string", length=255)
      */
     private $password;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PdfsRenter", mappedBy="renter")
+     */
+    private $pdfsRenters;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Roles", inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $role;
+
+    public function __construct()
+    {
+        $this->pdfsRenters = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -51,6 +69,49 @@ class Users
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PdfsRenter[]
+     */
+    public function getPdfsRenters(): Collection
+    {
+        return $this->pdfsRenters;
+    }
+
+    public function addPdfsRenter(PdfsRenter $pdfsRenter): self
+    {
+        if (!$this->pdfsRenters->contains($pdfsRenter)) {
+            $this->pdfsRenters[] = $pdfsRenter;
+            $pdfsRenter->setRenter($this);
+        }
+
+        return $this;
+    }
+
+    public function removePdfsRenter(PdfsRenter $pdfsRenter): self
+    {
+        if ($this->pdfsRenters->contains($pdfsRenter)) {
+            $this->pdfsRenters->removeElement($pdfsRenter);
+            // set the owning side to null (unless already changed)
+            if ($pdfsRenter->getRenter() === $this) {
+                $pdfsRenter->setRenter(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRole(): ?Roles
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Roles $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }
