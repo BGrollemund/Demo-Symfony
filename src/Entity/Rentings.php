@@ -50,11 +50,23 @@ class Rentings
      */
     private $renter;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RentingPool", mappedBy="renting")
+     */
+    private $rentingPools;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\RentingTax", mappedBy="renting")
+     */
+    private $rentingTaxes;
+
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
         $this->medium = new ArrayCollection();
         $this->renter = new ArrayCollection();
+        $this->rentingPools = new ArrayCollection();
+        $this->rentingTaxes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -181,6 +193,68 @@ class Rentings
     {
         if ($this->renter->contains($renter)) {
             $this->renter->removeElement($renter);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RentingPool[]
+     */
+    public function getRentingPools(): Collection
+    {
+        return $this->rentingPools;
+    }
+
+    public function addRentingPool(RentingPool $rentingPool): self
+    {
+        if (!$this->rentingPools->contains($rentingPool)) {
+            $this->rentingPools[] = $rentingPool;
+            $rentingPool->setRenting($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRentingPool(RentingPool $rentingPool): self
+    {
+        if ($this->rentingPools->contains($rentingPool)) {
+            $this->rentingPools->removeElement($rentingPool);
+            // set the owning side to null (unless already changed)
+            if ($rentingPool->getRenting() === $this) {
+                $rentingPool->setRenting(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RentingTax[]
+     */
+    public function getRentingTaxes(): Collection
+    {
+        return $this->rentingTaxes;
+    }
+
+    public function addRentingTax(RentingTax $rentingTax): self
+    {
+        if (!$this->rentingTaxes->contains($rentingTax)) {
+            $this->rentingTaxes[] = $rentingTax;
+            $rentingTax->setRenting($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRentingTax(RentingTax $rentingTax): self
+    {
+        if ($this->rentingTaxes->contains($rentingTax)) {
+            $this->rentingTaxes->removeElement($rentingTax);
+            // set the owning side to null (unless already changed)
+            if ($rentingTax->getRenting() === $this) {
+                $rentingTax->setRenting(null);
+            }
         }
 
         return $this;
