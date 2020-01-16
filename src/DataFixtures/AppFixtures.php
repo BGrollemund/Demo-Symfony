@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Discount;
+use App\Entity\Media;
 use App\Entity\PricesPool;
 use App\Entity\PricesTax;
 use App\Entity\RenterTypes;
@@ -41,6 +42,7 @@ class AppFixtures extends Fixture
         $this->loadSeasons($manager);
         $this->loadUsers($manager);
         $this->loadRentings($manager);
+        $this->loadMedia($manager);
     }
 
     public function loadDiscount( ObjectManager $manager )
@@ -55,6 +57,68 @@ class AppFixtures extends Fixture
                 ->setPercent($datum[1]);
             $manager->persist($discount);
         }
+        $manager->flush();
+    }
+
+    public function loadMedia( ObjectManager $manager )
+    {
+        $data = [
+            'rentings_types/mobil-01.jpg',
+            'rentings_types/caravan-01.jpg',
+            'rentings_types/location-01.jpg',
+            'rentings/mobil-01.jpg',
+            'rentings/carvan-01.jpg',
+            'rentings/location-01.jpg',
+        ];
+
+        for( $i=0; $i<4; $i++ ) {
+            $media = new Media();
+            $media
+                ->setFileName($data[0])
+                ->setRentingTypes($this->getReference('rentingTypes-'.$i));
+            $manager->persist($media);
+        }
+
+        for( $i=4; $i<7; $i++ ) {
+            $media = new Media();
+            $media
+                ->setFileName($data[1])
+                ->setRentingTypes($this->getReference('rentingTypes-'.$i));
+            $manager->persist($media);
+        }
+
+        for( $i=7; $i<9; $i++ ) {
+            $media = new Media();
+            $media
+                ->setFileName($data[2])
+                ->setRentingTypes($this->getReference('rentingTypes-'.$i));
+            $manager->persist($media);
+        }
+
+        for( $i=1; $i<51; $i++ ) {
+            $media = new Media();
+            $media
+                ->setFileName($data[3])
+                ->setRentings($this->getReference('mobils-'.$i));
+            $manager->persist($media);
+        }
+
+        for( $i=1; $i<11; $i++ ) {
+            $media = new Media();
+            $media
+                ->setFileName($data[4])
+                ->setRentings($this->getReference('caravans-'.$i));
+            $manager->persist($media);
+        }
+
+        for( $i=1; $i<31; $i++ ) {
+            $media = new Media();
+            $media
+                ->setFileName($data[5])
+                ->setRentings($this->getReference('locations-'.$i));
+            $manager->persist($media);
+        }
+
         $manager->flush();
     }
 
@@ -115,8 +179,9 @@ class AppFixtures extends Fixture
             $mobil
                 ->setLabel('Mobile Home '.$i)
                 ->setRenterType($this->getReference('renterTypes-1'))
-                ->addRenter( $this->getReference('renter-'.$i))
+                ->addRenter($this->getReference('renter-'.$i))
                 ->setRentingType($this->getReference('rentingTypes-'.$rand));
+            $this->setReference('mobils-'.$i, $mobil);
             $manager->persist($mobil);
         }
 
@@ -128,6 +193,7 @@ class AppFixtures extends Fixture
                 ->setLabel('Mobile Home '.$i)
                 ->setRenterType($this->getReference('renterTypes-0'))
                 ->setRentingType($this->getReference('rentingTypes-'.$rand));
+            $this->setReference('mobils-'.$i, $mobil);
             $manager->persist($mobil);
         }
 
@@ -139,6 +205,7 @@ class AppFixtures extends Fixture
                 ->setLabel('Caravane '.$i)
                 ->setRenterType($this->getReference('renterTypes-0'))
                 ->setRentingType($this->getReference('rentingTypes-'.$rand));
+            $this->setReference('caravans-'.$i, $caravan);
             $manager->persist($caravan);
         }
 
@@ -150,6 +217,7 @@ class AppFixtures extends Fixture
                 ->setLabel('Emplacement '.$i)
                 ->setRenterType($this->getReference('renterTypes-0'))
                 ->setRentingType($this->getReference('rentingTypes-'.$rand));
+            $this->setReference('locations-'.$i, $location);
             $manager->persist($location);
         }
 
