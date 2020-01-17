@@ -1,0 +1,7 @@
+vich_uploader:
+    db_driver: orm
+
+    mappings:
+        renting_types_image:
+            uri_prefix: /images/renting_types
+            upload_destination: '%kernel.project_dir%/public/images/renting_types'

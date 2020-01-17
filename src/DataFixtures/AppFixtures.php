@@ -63,9 +63,9 @@ class AppFixtures extends Fixture
     public function loadMedia( ObjectManager $manager )
     {
         $data = [
-            'rentings_types/mobil-01.jpg',
-            'rentings_types/caravan-01.jpg',
-            'rentings_types/location-01.jpg',
+            'renting_types/mobil-01.jpg',
+            'renting_types/caravan-01.jpg',
+            'renting_types/location-01.jpg',
             'rentings/mobil-01.jpg',
             'rentings/carvan-01.jpg',
             'rentings/location-01.jpg',
@@ -251,8 +251,8 @@ class AppFixtures extends Fixture
     public function loadRoles( ObjectManager $manager )
     {
         $data = [
-            'ADMIN',
-            'RENTER',
+            'ROLE_ADMIN',
+            'ROLE_USER',
         ];
         foreach ($data as $key => $datum) {
             $role = new Roles();
@@ -288,7 +288,7 @@ class AppFixtures extends Fixture
 
         $admin = new Users();
         $admin
-            ->setUserName('Admin')
+            ->setUsername('Admin')
             ->setPassword($this->encoder->encodePassword($admin, 'Camping3etoiles!'))
             ->setRole($this->getReference('roles-0'));
         $manager->persist($admin);
@@ -296,7 +296,7 @@ class AppFixtures extends Fixture
         for ( $i=1; $i<31; $i++ ) {
             $user = new Users();
             $user
-                ->setUserName($faker->userName)
+                ->setUsername($faker->userName)
                 ->setPassword($this->encoder->encodePassword($user, '123'))
                 ->setRole($this->getReference('roles-1'));
             $this->setReference('renter-'.$i, $user);

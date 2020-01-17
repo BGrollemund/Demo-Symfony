@@ -23,7 +23,7 @@ class Users implements UserInterface, Serializable
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $user_name;
+    private $username;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -46,6 +46,9 @@ class Users implements UserInterface, Serializable
      */
     private $rentings;
 
+
+    private $roles;
+
     public function __construct()
     {
         $this->pdfsRenters = new ArrayCollection();
@@ -57,14 +60,14 @@ class Users implements UserInterface, Serializable
         return $this->id;
     }
 
-    public function getUserName(): ?string
+    public function getUsername(): ?string
     {
-        return $this->user_name;
+        return $this->username;
     }
 
-    public function setUserName(string $user_name): self
+    public function setUsername(string $username): self
     {
-        $this->user_name = $user_name;
+        $this->username = $username;
 
         return $this;
     }
@@ -162,7 +165,7 @@ class Users implements UserInterface, Serializable
     {
         return serialize([
             $this->id,
-            $this->user_name,
+            $this->username,
             $this->password,
         ]);
     }
@@ -180,7 +183,7 @@ class Users implements UserInterface, Serializable
     {
         list(
             $this->id,
-            $this->user_name,
+            $this->username,
             $this->password
         ) = unserialize( $serialized, ['allowed_classes' => false] );
     }
@@ -201,7 +204,7 @@ class Users implements UserInterface, Serializable
      */
     public function getRoles()
     {
-        return [''];
+        return [ $this->role->getLabel() ];
     }
 
     /**

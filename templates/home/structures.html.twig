@@ -4,16 +4,19 @@
     <div class="jumbotron text-center mb-0">
         <h1>Camping *** l'Espadrille Volante</h1>
     </div>
-    <div>
-        <img src="{{ asset('images/structures/home-01.jpg') }}" alt="notre camping" class="min-vw-100">
-    </div>
     <div class="row">
         {{ include('home/_menu.html.twig') }}
     </div>
 
     <div class="container">
-        <div class="mb-5">
-            <h2 class="mb-5">Bienvenue !</h2>
+        <div>
+            <h2 class="m-5">Piscine</h2>
+            <div class="mb-5 d-flex justify-content-around">
+                <img src="{{ asset( 'images/structures/pool-01.jpg' ) }}" alt="piscine">
+                <img src="{{ asset( 'images/structures/pool-02.jpg' ) }}" alt="piscine">
+                <img src="{{ asset( 'images/structures/pool-03.jpg' ) }}" alt="piscine">
+                <img src="{{ asset( 'images/structures/pool-04.jpg' ) }}" alt="piscine">
+            </div>
             <p>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
@@ -30,6 +33,19 @@
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
                 Accusantium aspernatur dicta earum explicabo magnam veniam.
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
+                Accusantium aspernatur dicta earum explicabo magnam veniam.
+            </p>
+            <h2 class="mb-3 ml-5 mt-5">Tarifs</h2>
+            <ul class="list-unstyled">
+                {% for price_pool in prices_pool %}
+                    <li>
+                        {{ price_pool.label }} : {{ price_pool.price / 100 }} € par jour
+                    </li>
+                {% endfor %}
+            </ul>
+            <p>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
                 Accusantium aspernatur dicta earum explicabo magnam veniam.

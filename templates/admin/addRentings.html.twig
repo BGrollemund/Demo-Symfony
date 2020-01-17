@@ -1,19 +1,21 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Admin - Camping *** l'Espadrille Volante{% endblock %}
+
 {% block body %}
     <div class="jumbotron text-center mb-0">
+        <span class="float-right">
+                <a href="{{ path('logout') }}" class="btn btn-outline-info">Déconnexion</a>
+        </span>
         <h1>Camping *** l'Espadrille Volante</h1>
     </div>
-    <div>
-        <img src="{{ asset('images/structures/home-01.jpg') }}" alt="notre camping" class="min-vw-100">
-    </div>
     <div class="row">
-        {{ include('home/_menu.html.twig') }}
+        {{ include('admin/_menu.html.twig') }}
     </div>
 
     <div class="container">
         <div class="mb-5">
-            <h2 class="mb-5">Bienvenue !</h2>
+            <h2 class="mb-5">Ajouter une location</h2>
             <p>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
@@ -36,4 +38,5 @@
             </p>
         </div>
     </div>
+
 {% endblock %}
