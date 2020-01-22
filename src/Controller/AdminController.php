@@ -4,10 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Bookings;
 use App\Entity\Media;
+use App\Entity\RenterTypes;
 use App\Entity\Rentings;
 use App\Entity\Users;
 use App\Form\MediaType;
 use App\Form\RentingsType;
+use App\Form\UsersEditType;
 use App\Form\UsersType;
 use DateTime;
 use Exception;
@@ -109,7 +111,7 @@ class AdminController extends AbstractController
      */
     public function editUser(Users $user, Request $request): Response
     {
-        $form = $this->createForm(UsersType::class, $user);
+        $form = $this->createForm(UsersEditType::class, $user);
         $form->handleRequest($request);
 
         if( $form->isSubmitted() && $form->isValid() ) {
@@ -121,10 +123,40 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('showUsers');
         }
 
-        return $this->render('admin/addUser.html.twig', [
+        return $this->render('admin/editUser.html.twig', [
             'user' => $user,
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("admin/supprimer-utilisateur/{id}", name="deleteUser")
+     * @param Users $user
+     * @param Request $request
+     * @return Response
+     */
+    public function deleteUser(Users $user, Request $request): Response
+    {
+        if( $this->isCsrfTokenValid( 'delete'.$user->getId(), $request->get('_token') ) ) {
+            $em = $this->getDoctrine()->getManager();
+            $rentings = $user->getRentings();
+            foreach( $rentings as $renting ) {
+                $renter_type = $this
+                                ->getDoctrine()
+                                ->getRepository( RenterTypes::class)
+                                ->findOneBy(['label'=>'Camping']);
+                $renting
+                    ->setUsers(null)
+                    ->setRenterType($renter_type);
+                $em->persist($renting);
+            }
+            $em->flush();
+            $em->remove($user);
+            $em->flush();
+            $this->addFlash('success_user', 'L\'utilisateur '.$user->getUsername().' a été supprimé');
+        }
+
+        return $this->redirectToRoute('showUsers');
     }
 
     /**
@@ -162,7 +194,7 @@ class AdminController extends AbstractController
      * @return Response
      * @throws Exception
      */
-    public function addRentings( Request $request ): Response
+    public function addRenting( Request $request ): Response
     {
         $renting = new Rentings();
 
@@ -261,9 +293,9 @@ class AdminController extends AbstractController
             $em->remove($renting);
             $em->flush();
             $this->addFlash('success', 'La location '.$renting->getLabel().' a été supprimé');
-
-            return $this->redirectToRoute('showRentings');
         }
+
+        return $this->redirectToRoute('showRentings');
     }
 
     /**
