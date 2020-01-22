@@ -50,6 +50,12 @@ class Roles
         return $this;
     }
 
+    public function getProperLabel(): ?string
+    {
+       $result = ( $this->label === 'ROLE_ADMIN' ) ? 'Administrateur' : 'Propriétaire';
+       return $result;
+    }
+
     /**
      * @return Collection|Users[]
      */

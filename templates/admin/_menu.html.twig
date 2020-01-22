@@ -1,15 +1,28 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-secondary min-vw-100 mt-0 mb-5">
     <div class="collapse navbar-collapse pl-5">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item active pl-4">
+            <li class="nav-item active ml-4 border-left border-right border-light">
+                <a class="nav-link text-light" href="{{ path( 'admin' ) }}">Tableau de bord</a>
+            </li>
+            <li class="nav-item active border-right border-light">
                 <a class="nav-link text-light" href="{{ path( 'bookings' ) }}">Réservations en cours</a>
             </li>
-            <li class="nav-item dropdown">
+            <li class="nav-item dropdown border-right border-light">
+                <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Gérer les utilisateurs
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ path( 'addUser' ) }}">Ajouter</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ path( 'showUsers' ) }}">Editer</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown border-right border-light">
                 <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Gérer les locations
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ path( 'addRentings' ) }}">Ajouter</a>
+                    <a class="dropdown-item" href="{{ path( 'addRenting' ) }}">Ajouter</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="{{ path( 'showRentings' ) }}">Editer</a>
                 </div>

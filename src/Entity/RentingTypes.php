@@ -29,19 +29,24 @@ class RentingTypes
     private $price;
 
     /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Rentings", mappedBy="renting_type")
      */
     private $rentings;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="rentingTypes")
+     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="renting_type")
      */
-    private $medium;
+    private $media;
 
     public function __construct()
     {
         $this->rentings = new ArrayCollection();
-        $this->medium = new ArrayCollection();
+        $this->media = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -69,6 +74,18 @@ class RentingTypes
     public function setPrice(int $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }
@@ -107,16 +124,16 @@ class RentingTypes
     /**
      * @return Collection|Media[]
      */
-    public function getMedium(): Collection
+    public function getMedia(): Collection
     {
-        return $this->medium;
+        return $this->media;
     }
 
     public function addMedium(Media $medium): self
     {
-        if (!$this->medium->contains($medium)) {
-            $this->medium[] = $medium;
-            $medium->setRentingTypes($this);
+        if (!$this->media->contains($medium)) {
+            $this->media[] = $medium;
+            $medium->setRentingType($this);
         }
 
         return $this;
@@ -124,11 +141,11 @@ class RentingTypes
 
     public function removeMedium(Media $medium): self
     {
-        if ($this->medium->contains($medium)) {
-            $this->medium->removeElement($medium);
+        if ($this->media->contains($medium)) {
+            $this->media->removeElement($medium);
             // set the owning side to null (unless already changed)
-            if ($medium->getRentingTypes() === $this) {
-                $medium->setRentingTypes(null);
+            if ($medium->getRentingType() === $this) {
+                $medium->setRentingType(null);
             }
         }
 

@@ -2,6 +2,14 @@ vich_uploader:
     db_driver: orm
 
     mappings:
+        renting_image:
+            uri_prefix: /images/rentings
+            upload_destination: '%kernel.project_dir%/public/images/rentings'
+
+        presentation_image:
+            uri_prefix: /images/structures
+            upload_destination: '%kernel.project_dir%/public/images/structures'
+
         renting_types_image:
             uri_prefix: /images/renting_types
             upload_destination: '%kernel.project_dir%/public/images/renting_types'

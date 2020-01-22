@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Rentings;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query;
 
 /**
  * @method Rentings|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,13 @@ class RentingsRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Rentings::class);
+    }
+
+    public function findAllQuery(): Query
+    {
+        return $this->createQueryBuilder('r')
+            ->orderBy('r.id', 'DESC')
+            ->getQuery();
     }
 
     // /**

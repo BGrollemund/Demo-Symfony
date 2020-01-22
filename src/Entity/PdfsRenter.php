@@ -30,7 +30,7 @@ class PdfsRenter
      * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="pdfsRenters")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $renter;
+    private $user;
 
     public function getId(): ?int
     {
@@ -61,14 +61,14 @@ class PdfsRenter
         return $this;
     }
 
-    public function getRenter(): ?Users
+    public function getUser(): ?Users
     {
-        return $this->renter;
+        return $this->user;
     }
 
-    public function setRenter(?Users $renter): self
+    public function setUser(?Users $user): self
     {
-        $this->renter = $renter;
+        $this->user = $user;
 
         return $this;
     }

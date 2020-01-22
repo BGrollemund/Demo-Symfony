@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Admin - Camping *** l'Espadrille Volante{% endblock %}
+
+{% block body %}
+    <div class="jumbotron text-center mb-0">
+        <span class="float-right">
+            <a href="{{ path('logout') }}" class="btn btn-info">Déconnexion</a>
+        </span>
+        <h1>Camping *** l'Espadrille Volante</h1>
+    </div>
+    <div class="row">
+        {{ include('admin/_menu.html.twig') }}
+    </div>
+
+    <div class="container">
+        {% for message in app.flashes( 'success_user' ) %}
+            <div class="row mb-2 d-flex flex-row justify-content-center">
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            </div>
+        {% endfor %}
+        <div class="mb-5">
+            <h2 class="mb-5">Liste des utilisateurs</h2>
+            {% for key, user in users %}
+                <ul class="m-4 d-flex list-unstyled">
+                    <li class="text-info col-3">{{ roles[key] }}</li>
+                    <li class="font-weight-bold col-3">{{ user.username }}</li>
+                    <li class="col-3"><a href="{{ path('editUser', { id: user.id }) }}" class="btn btn-success w-75">Editer</a></li>
+                </ul>
+            {% endfor %}
+            <div class="row d-flex flex-row justify-content-center">
+                <div class="pagination">
+                    {{ knp_pagination_render(users) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

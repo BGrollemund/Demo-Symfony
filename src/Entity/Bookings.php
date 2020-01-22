@@ -45,9 +45,21 @@ class Bookings
      */
     private $pdfsBookings;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingPool", mappedBy="booking")
+     */
+    private $bookingPools;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingTax", mappedBy="booking")
+     */
+    private $bookingTaxes;
+
     public function __construct()
     {
         $this->pdfsBookings = new ArrayCollection();
+        $this->bookingPools = new ArrayCollection();
+        $this->bookingTaxes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -128,6 +140,68 @@ class Bookings
             // set the owning side to null (unless already changed)
             if ($pdfsBooking->getBooking() === $this) {
                 $pdfsBooking->setBooking(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingPool[]
+     */
+    public function getBookingPools(): Collection
+    {
+        return $this->bookingPools;
+    }
+
+    public function addBookingPool(BookingPool $bookingPool): self
+    {
+        if (!$this->bookingPools->contains($bookingPool)) {
+            $this->bookingPools[] = $bookingPool;
+            $bookingPool->setBooking($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingPool(BookingPool $bookingPool): self
+    {
+        if ($this->bookingPools->contains($bookingPool)) {
+            $this->bookingPools->removeElement($bookingPool);
+            // set the owning side to null (unless already changed)
+            if ($bookingPool->getBooking() === $this) {
+                $bookingPool->setBooking(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BookingTax[]
+     */
+    public function getBookingTaxes(): Collection
+    {
+        return $this->bookingTaxes;
+    }
+
+    public function addBookingTax(BookingTax $bookingTax): self
+    {
+        if (!$this->bookingTaxes->contains($bookingTax)) {
+            $this->bookingTaxes[] = $bookingTax;
+            $bookingTax->setBooking($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBookingTax(BookingTax $bookingTax): self
+    {
+        if ($this->bookingTaxes->contains($bookingTax)) {
+            $this->bookingTaxes->removeElement($bookingTax);
+            // set the owning side to null (unless already changed)
+            if ($bookingTax->getBooking() === $this) {
+                $bookingTax->setBooking(null);
             }
         }
 

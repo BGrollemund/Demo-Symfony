@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+
+use App\Entity\Presentation;
 use App\Entity\PricesPool;
 use App\Entity\RentingTypes;
 use App\Entity\Seasons;
@@ -17,7 +19,17 @@ class HomeController extends AbstractController
      */
     public function index()
     {
-        return $this->render('home/index.html.twig');
+        $presentation = $this
+                        ->getDoctrine()
+                        ->getRepository(Presentation::class)
+                        ->findAll();
+
+        $image = $presentation[0]->getMedia()->toArray()[0];
+
+        return $this->render('home/index.html.twig', [
+            'presentation' => $presentation[0],
+            'image' => $image
+        ]);
     }
 
     /**
@@ -30,8 +42,17 @@ class HomeController extends AbstractController
                         ->getRepository(PricesPool::class)
                         ->findAll();
 
+        $presentation = $this
+            ->getDoctrine()
+            ->getRepository(Presentation::class)
+            ->find(1);
+
+        $images = $presentation->getMedia()->toArray();
+
         return $this->render('home/structures.html.twig', [
-            'prices_pool' => $prices_pool
+            'prices_pool' => $prices_pool,
+            'presentation' => $presentation,
+            'images' => $images
         ]);
     }
 
@@ -47,7 +68,7 @@ class HomeController extends AbstractController
 
         $images_files = [];
         foreach( $renting_types as $key => $renting_type ) {
-            $images_files[] = $renting_type->getMedium()->toArray()[0]->getFileName();
+            $images_files[] = $renting_type->getMedia()->toArray()[0];
         }
 
         $seasons = $this

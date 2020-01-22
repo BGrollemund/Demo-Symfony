@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Bookings;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query;
 
 /**
  * @method Bookings|null find($id, $lockMode = null, $lockVersion = null)
@@ -17,6 +18,13 @@ class BookingsRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Bookings::class);
+    }
+
+    public function findAllQuery(): Query
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.start_date', 'ASC')
+            ->getQuery();
     }
 
     // /**

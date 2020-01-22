@@ -5,7 +5,7 @@
 {% block body %}
     <div class="jumbotron text-center mb-0">
         <span class="float-right">
-            <a href="{{ path('logout') }}" class="btn btn-outline-info">Déconnexion</a>
+            <a href="{{ path('logout') }}" class="btn btn-info">Déconnexion</a>
         </span>
         <h1>Camping *** l'Espadrille Volante</h1>
     </div>
@@ -16,26 +16,32 @@
     <div class="container">
         <div class="mb-5">
             <h2 class="mb-5">Liste des réservations</h2>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-            </p>
+            {% for key, booking in bookings %}
+                <div class="mt-5 mb-5">
+                    <h3 class="m-4">{{ rentings[key].label }}  (emplacement: {{ rentings[key].location }})</h3>
+                    <div class="d-flex">
+                        <div class="col-4">
+                            <h5 class="text-info mb-4">
+                                Type : {{ renting_types[key].label }}
+                            </h5>
+                            <div class="font-italic">
+                                Loué du <span class="font-weight-bold">{{ booking.startDate|date('d/m/Y') }} au {{ booking.endDate|date('d/m/Y') }}</span><br>
+                                par <span class="text-primary font-weight-bold">{{ guests[key].firstName }} {{ guests[key].lastName }}</span><br>
+                                email: <a href="mailto:{{ guests[key].email }}">{{ guests[key].email }}</a><br>
+                                téléphone: {{ guests[key].phoneNumber }}
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <img src="{{ vich_uploader_asset( images_files[key], 'imageFile' ) }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="row d-flex flex-row justify-content-center">
+                <div class="pagination">
+                    {{ knp_pagination_render(bookings) }}
+                </div>
+            </div>
         </div>
     </div>
 

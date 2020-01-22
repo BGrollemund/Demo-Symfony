@@ -24,6 +24,11 @@ class Rentings
     private $label;
 
     /**
+     * @ORM\Column(type="string", length=100)
+     */
+    private $location;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Bookings", mappedBy="renting")
      */
     private $bookings;
@@ -41,32 +46,19 @@ class Rentings
     private $renter_type;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="rentings")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="rentings")
      */
-    private $medium;
+    private $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Users", inversedBy="rentings")
+     * @ORM\OneToMany(targetEntity="App\Entity\Media", mappedBy="renting")
      */
-    private $renter;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RentingPool", mappedBy="renting")
-     */
-    private $rentingPools;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RentingTax", mappedBy="renting")
-     */
-    private $rentingTaxes;
+    private $media;
 
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
-        $this->medium = new ArrayCollection();
-        $this->renter = new ArrayCollection();
-        $this->rentingPools = new ArrayCollection();
-        $this->rentingTaxes = new ArrayCollection();
+        $this->media = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -82,6 +74,18 @@ class Rentings
     public function setLabel(string $label): self
     {
         $this->label = $label;
+
+        return $this;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(string $location): self
+    {
+        $this->location = $location;
 
         return $this;
     }
@@ -141,19 +145,31 @@ class Rentings
         return $this;
     }
 
+    public function getUsers(): ?Users
+    {
+        return $this->users;
+    }
+
+    public function setUsers(?Users $users): self
+    {
+        $this->users = $users;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Media[]
      */
-    public function getMedium(): Collection
+    public function getMedia(): Collection
     {
-        return $this->medium;
+        return $this->media;
     }
 
     public function addMedium(Media $medium): self
     {
-        if (!$this->medium->contains($medium)) {
-            $this->medium[] = $medium;
-            $medium->setRentings($this);
+        if (!$this->media->contains($medium)) {
+            $this->media[] = $medium;
+            $medium->setRenting($this);
         }
 
         return $this;
@@ -161,99 +177,11 @@ class Rentings
 
     public function removeMedium(Media $medium): self
     {
-        if ($this->medium->contains($medium)) {
-            $this->medium->removeElement($medium);
+        if ($this->media->contains($medium)) {
+            $this->media->removeElement($medium);
             // set the owning side to null (unless already changed)
-            if ($medium->getRentings() === $this) {
-                $medium->setRentings(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Users[]
-     */
-    public function getRenter(): Collection
-    {
-        return $this->renter;
-    }
-
-    public function addRenter(Users $renter): self
-    {
-        if (!$this->renter->contains($renter)) {
-            $this->renter[] = $renter;
-        }
-
-        return $this;
-    }
-
-    public function removeRenter(Users $renter): self
-    {
-        if ($this->renter->contains($renter)) {
-            $this->renter->removeElement($renter);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|RentingPool[]
-     */
-    public function getRentingPools(): Collection
-    {
-        return $this->rentingPools;
-    }
-
-    public function addRentingPool(RentingPool $rentingPool): self
-    {
-        if (!$this->rentingPools->contains($rentingPool)) {
-            $this->rentingPools[] = $rentingPool;
-            $rentingPool->setRenting($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRentingPool(RentingPool $rentingPool): self
-    {
-        if ($this->rentingPools->contains($rentingPool)) {
-            $this->rentingPools->removeElement($rentingPool);
-            // set the owning side to null (unless already changed)
-            if ($rentingPool->getRenting() === $this) {
-                $rentingPool->setRenting(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|RentingTax[]
-     */
-    public function getRentingTaxes(): Collection
-    {
-        return $this->rentingTaxes;
-    }
-
-    public function addRentingTax(RentingTax $rentingTax): self
-    {
-        if (!$this->rentingTaxes->contains($rentingTax)) {
-            $this->rentingTaxes[] = $rentingTax;
-            $rentingTax->setRenting($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRentingTax(RentingTax $rentingTax): self
-    {
-        if ($this->rentingTaxes->contains($rentingTax)) {
-            $this->rentingTaxes->removeElement($rentingTax);
-            // set the owning side to null (unless already changed)
-            if ($rentingTax->getRenting() === $this) {
-                $rentingTax->setRenting(null);
+            if ($medium->getRenting() === $this) {
+                $medium->setRenting(null);
             }
         }
 

@@ -5,7 +5,7 @@
 {% block body %}
     <div class="jumbotron text-center mb-0">
         <span class="float-right">
-                <a href="{{ path('logout') }}" class="btn btn-outline-info">Déconnexion</a>
+            <a href="{{ path('logout') }}" class="btn btn-info">Déconnexion</a>
         </span>
         <h1>Camping *** l'Espadrille Volante</h1>
     </div>
@@ -14,28 +14,50 @@
     </div>
 
     <div class="container">
+        {% for message in app.flashes( 'success' ) %}
+            <div class="row mb-2 d-flex flex-row justify-content-center">
+                <div class="alert alert-success">
+                    {{ message }}
+                </div>
+            </div>
+        {% endfor %}
         <div class="mb-5">
             <h2 class="mb-5">Liste des locations</h2>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-            </p>
+            {% for key, renting in rentings %}
+                <div class="mt-5 mb-5">
+                    <h3 class="m-4">{{ renting.label }}  (emplacement: {{ renting.location }})</h3>
+                    <div class="d-flex">
+                        <div class="col-4">
+                            <h5 class="text-info mb-4">
+                                Type : {{ renting_types[key].label }}
+                            </h5>
+                            <div class="m-3">
+                                <a href="{{ path('editRenting', { id: renting.id }) }}" class="btn btn-success w-50">Editer</a>
+                            </div>
+                            <div class="m-3">
+                                <a href="{{ path('editMedium', { id: images_files[key].id }) }}" class="btn btn-success w-50">Photo</a>
+                            </div>
+                            <div class="m-3">
+                                <form action="{{ path( 'deleteRenting', { id: renting.id } ) }}"
+                                      method="POST"
+                                      onsubmit="return confirm('Etes-vous certain ?')">
+                                    <input type="hidden" name="_token"
+                                           value="{{ csrf_token('delete' ~ renting.id ) }}">
+                                    <button class="btn btn-danger w-50">Supprimer</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-8">
+                            <img src="{{ vich_uploader_asset( images_files[key], 'imageFile' ) }}" alt="">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="row d-flex flex-row justify-content-center">
+                <div class="pagination">
+                    {{ knp_pagination_render(rentings) }}
+                </div>
+            </div>
         </div>
     </div>
 

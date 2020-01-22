@@ -31,23 +31,20 @@ class Users implements UserInterface, Serializable
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PdfsRenter", mappedBy="renter")
+     * @ORM\OneToMany(targetEntity="App\Entity\PdfsRenter", mappedBy="user")
      */
     private $pdfsRenters;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Rentings", mappedBy="users")
+     */
+    private $rentings;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Roles", inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
      */
     private $role;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Rentings", mappedBy="renter")
-     */
-    private $rentings;
-
-
-    private $roles;
 
     public function __construct()
     {
@@ -96,7 +93,7 @@ class Users implements UserInterface, Serializable
     {
         if (!$this->pdfsRenters->contains($pdfsRenter)) {
             $this->pdfsRenters[] = $pdfsRenter;
-            $pdfsRenter->setRenter($this);
+            $pdfsRenter->setUser($this);
         }
 
         return $this;
@@ -107,22 +104,10 @@ class Users implements UserInterface, Serializable
         if ($this->pdfsRenters->contains($pdfsRenter)) {
             $this->pdfsRenters->removeElement($pdfsRenter);
             // set the owning side to null (unless already changed)
-            if ($pdfsRenter->getRenter() === $this) {
-                $pdfsRenter->setRenter(null);
+            if ($pdfsRenter->getUser() === $this) {
+                $pdfsRenter->setUser(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getRole(): ?Roles
-    {
-        return $this->role;
-    }
-
-    public function setRole(?Roles $role): self
-    {
-        $this->role = $role;
 
         return $this;
     }
@@ -139,7 +124,7 @@ class Users implements UserInterface, Serializable
     {
         if (!$this->rentings->contains($renting)) {
             $this->rentings[] = $renting;
-            $renting->addRenter($this);
+            $renting->setUsers($this);
         }
 
         return $this;
@@ -149,8 +134,23 @@ class Users implements UserInterface, Serializable
     {
         if ($this->rentings->contains($renting)) {
             $this->rentings->removeElement($renting);
-            $renting->removeRenter($this);
+            // set the owning side to null (unless already changed)
+            if ($renting->getUsers() === $this) {
+                $renting->setUsers(null);
+            }
         }
+
+        return $this;
+    }
+
+    public function getRole(): ?Roles
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Roles $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }
@@ -181,11 +181,9 @@ class Users implements UserInterface, Serializable
      */
     public function unserialize($serialized)
     {
-        list(
-            $this->id,
+        list($this->id,
             $this->username,
-            $this->password
-        ) = unserialize( $serialized, ['allowed_classes' => false] );
+            $this->password) = unserialize( $serialized, ['allowed_classes' => false]);
     }
 
     /**
@@ -216,7 +214,7 @@ class Users implements UserInterface, Serializable
      */
     public function getSalt()
     {
-        return 'camping3ETOILESespadrille_volante';
+        return 'EspadrilleVolante3ETOILES-Camping!';
     }
 
     /**

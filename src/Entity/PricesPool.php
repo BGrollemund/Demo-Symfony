@@ -29,13 +29,13 @@ class PricesPool
     private $price;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RentingPool", mappedBy="pool")
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingPool", mappedBy="price_pool")
      */
-    private $rentingPools;
+    private $bookingPools;
 
     public function __construct()
     {
-        $this->rentingPools = new ArrayCollection();
+        $this->bookingPools = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -68,30 +68,30 @@ class PricesPool
     }
 
     /**
-     * @return Collection|RentingPool[]
+     * @return Collection|BookingPool[]
      */
-    public function getRentingPools(): Collection
+    public function getBookingPools(): Collection
     {
-        return $this->rentingPools;
+        return $this->bookingPools;
     }
 
-    public function addRentingPool(RentingPool $rentingPool): self
+    public function addBookingPool(BookingPool $bookingPool): self
     {
-        if (!$this->rentingPools->contains($rentingPool)) {
-            $this->rentingPools[] = $rentingPool;
-            $rentingPool->setPool($this);
+        if (!$this->bookingPools->contains($bookingPool)) {
+            $this->bookingPools[] = $bookingPool;
+            $bookingPool->setPricePool($this);
         }
 
         return $this;
     }
 
-    public function removeRentingPool(RentingPool $rentingPool): self
+    public function removeBookingPool(BookingPool $bookingPool): self
     {
-        if ($this->rentingPools->contains($rentingPool)) {
-            $this->rentingPools->removeElement($rentingPool);
+        if ($this->bookingPools->contains($bookingPool)) {
+            $this->bookingPools->removeElement($bookingPool);
             // set the owning side to null (unless already changed)
-            if ($rentingPool->getPool() === $this) {
-                $rentingPool->setPool(null);
+            if ($bookingPool->getPricePool() === $this) {
+                $bookingPool->setPricePool(null);
             }
         }
 

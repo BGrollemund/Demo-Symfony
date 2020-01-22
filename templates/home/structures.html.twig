@@ -12,30 +12,13 @@
         <div>
             <h2 class="m-5">Piscine</h2>
             <div class="mb-5 d-flex justify-content-around">
-                <img src="{{ asset( 'images/structures/pool-01.jpg' ) }}" alt="piscine">
-                <img src="{{ asset( 'images/structures/pool-02.jpg' ) }}" alt="piscine">
-                <img src="{{ asset( 'images/structures/pool-03.jpg' ) }}" alt="piscine">
-                <img src="{{ asset( 'images/structures/pool-04.jpg' ) }}" alt="piscine">
+                <img src="{{ vich_uploader_asset( images[1], 'imageFilePresentation' ) }}" alt="piscine">
+                <img src="{{ vich_uploader_asset( images[2], 'imageFilePresentation' ) }}" alt="piscine">
+                <img src="{{ vich_uploader_asset( images[3], 'imageFilePresentation' ) }}" alt="piscine">
+                <img src="{{ vich_uploader_asset( images[4], 'imageFilePresentation' ) }}" alt="piscine">
             </div>
             <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
+                {{ presentation.infoPool }}
             </p>
             <h2 class="mb-3 ml-5 mt-5">Tarifs</h2>
             <ul class="list-unstyled">
@@ -45,11 +28,6 @@
                     </li>
                 {% endfor %}
             </ul>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Accusamus alias aliquam expedita explicabo iure magnam nam obcaecati officiis praesentium, quam velit voluptatem voluptatum?
-                Accusantium aspernatur dicta earum explicabo magnam veniam.
-            </p>
         </div>
     </div>
 {% endblock %}

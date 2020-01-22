@@ -29,13 +29,13 @@ class PricesTax
     private $price;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\RentingTax", mappedBy="tax")
+     * @ORM\OneToMany(targetEntity="App\Entity\BookingTax", mappedBy="price_tax")
      */
-    private $rentingTaxes;
+    private $bookingTaxes;
 
     public function __construct()
     {
-        $this->rentingTaxes = new ArrayCollection();
+        $this->bookingTaxes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -68,30 +68,30 @@ class PricesTax
     }
 
     /**
-     * @return Collection|RentingTax[]
+     * @return Collection|BookingTax[]
      */
-    public function getRentingTaxes(): Collection
+    public function getBookingTaxes(): Collection
     {
-        return $this->rentingTaxes;
+        return $this->bookingTaxes;
     }
 
-    public function addRentingTax(RentingTax $rentingTax): self
+    public function addBookingTax(BookingTax $bookingTax): self
     {
-        if (!$this->rentingTaxes->contains($rentingTax)) {
-            $this->rentingTaxes[] = $rentingTax;
-            $rentingTax->setTax($this);
+        if (!$this->bookingTaxes->contains($bookingTax)) {
+            $this->bookingTaxes[] = $bookingTax;
+            $bookingTax->setPriceTax($this);
         }
 
         return $this;
     }
 
-    public function removeRentingTax(RentingTax $rentingTax): self
+    public function removeBookingTax(BookingTax $bookingTax): self
     {
-        if ($this->rentingTaxes->contains($rentingTax)) {
-            $this->rentingTaxes->removeElement($rentingTax);
+        if ($this->bookingTaxes->contains($bookingTax)) {
+            $this->bookingTaxes->removeElement($bookingTax);
             // set the owning side to null (unless already changed)
-            if ($rentingTax->getTax() === $this) {
-                $rentingTax->setTax(null);
+            if ($bookingTax->getPriceTax() === $this) {
+                $bookingTax->setPriceTax(null);
             }
         }
 
