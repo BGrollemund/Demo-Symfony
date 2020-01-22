@@ -3,17 +3,91 @@
 namespace App\Controller;
 
 
+use App\Entity\Bookings;
+use App\Entity\Guests;
 use App\Entity\Presentation;
 use App\Entity\PricesPool;
+use App\Entity\Rentings;
 use App\Entity\RentingTypes;
 use App\Entity\Seasons;
+use App\Form\BookType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class HomeController extends AbstractController
 {
+    /**
+     * @Route("/nos-locations/reserver/{id}", name="book")
+     * @param RentingTypes $renting_type
+     * @param Request $request
+     * @return Response
+     */
+    public function book(RentingTypes $renting_type, Request $request): Response
+    {
+        $images_files = $renting_type->getMedia()->toArray()[0];
+
+        $seasons = $this
+            ->getDoctrine()
+            ->getRepository(Seasons::class)
+            ->findAll();
+
+        $booking = new Bookings();
+
+        $form = $this->createForm(BookType::class, $booking);
+        $form->handleRequest($request);
+
+        if( $form->isSubmitted() && $form->isValid() ) {
+            $renting = $this
+                            ->getDoctrine()
+                            ->getRepository(Rentings::class)
+                            ->findOneBy(['renting_type' => $renting_type->getId()]);
+
+            $guest = new Guests();
+            $guest
+                ->setLastName($form->getData()->getGuest()->getLastName())
+                ->setFirstName($form->getData()->getGuest()->getFirstName())
+                ->setEmail($form->getData()->getGuest()->getEmail())
+                ->setPhoneNumber($form->getData()->getGuest()->getPhoneNumber());
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($guest);
+            $em->flush();
+
+            $booking
+                ->setStartDate($form->getData()->getStartDate())
+                ->setEndDate($form->getData()->getEndDate())
+                ->setRenting($renting)
+                ->setGuest($guest);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($booking);
+            $em->flush();
+
+            return $this->redirectToRoute('confirmBook');
+        }
+
+        return $this->render('home/book.html.twig', [
+            'booking' => $booking,
+            'renting_type' => $renting_type,
+            'images_files' => $images_files,
+            'seasons' => $seasons,
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/nos-locations/confirmation-reservation", name="confirmBook")
+     * @return Response
+     */
+    public function confirmBook(): Response
+    {
+        return $this->render('home/confirmBook.html.twig', [
+
+        ]);
+    }
+
     /**
      * @Route("/", name="home")
      */

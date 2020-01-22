@@ -19,15 +19,19 @@
                     <div class="text-center m-5">
                         <img src="{{ vich_uploader_asset( images_files[key], 'imageFileRentingTypes' ) }}" alt="">
                     </div>
-                    <div class="m-3">
+                    <div class="m-3 mb-5">
                         {{ renting_type.description }}
                     </div>
-                    <div class="mb-3">
-                        {% for season in seasons %}
-                            <p>
-                                Du {{ season.startDate|date('d/m/Y') }} au {{ season.endDate|date('d/m/Y') }} : {{ renting_type.price + ( renting_type.price * season.percent / 100 ) }} € par jour ({{ season.label }})
-                            </p>
-                        {% endfor %}
+                    <div class="m-3 d-flex">
+                        <div class="col-8">
+                            {% for season in seasons %}
+                                Du {{ season.startDate|date('d/m/Y') }} au {{ season.endDate|date('d/m/Y') }} :
+                                {{ renting_type.price + ( renting_type.price * season.percent / 100 ) }} € par jour ({{ season.label }})<br>
+                            {% endfor %}
+                        </div>
+                        <div class="col-4">
+                            <a href="{{ path('book', { id: renting_type.id }) }}" class="btn btn-success w-50">Réserver</a>
+                        </div>
                     </div>
                 </div>
             {% endfor %}

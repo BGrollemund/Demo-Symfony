@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="jumbotron text-center mb-0">
+    <h1>Camping *** l'Espadrille Volante</h1>
+</div>
+<div class="row">
+    {{ include('home/_menu.html.twig') }}
+</div>
+    <div class="container">
+        <div>
+            <div class="mt-5">
+                <h2 class="mb-5">Réserver votre logement</h2>
+            </div>
+            <div class="mt-5">
+                <h3 class="m-5">{{ renting_type.label }}</h3>
+                <div class="text-center m-5">
+                    <img src="{{ vich_uploader_asset( images_files, 'imageFileRentingTypes' ) }}" alt="">
+                </div>
+                <div class="m-3 mb-5">
+                    {{ renting_type.description }}
+                </div>
+                <div class="m-3 d-flex">
+                    <div class="col-6">
+                        {% for season in seasons %}
+                            Du {{ season.startDate|date('d/m/Y') }} au {{ season.endDate|date('d/m/Y') }} :
+                            {{ renting_type.price + ( renting_type.price * season.percent / 100 ) }} € par jour ({{ season.label }})<br>
+                        {% endfor %}
+                    </div>
+                    <div class="col-6">
+                        {{ form_start(form) }}
+                        <div class="row">
+                            <div class="col-6">{{ form_row(form.start_date) }}</div>
+                            <div class="col-6">{{ form_row(form.end_date) }}</div>
+                            <div class="col-6">
+                                {{ form_row(form.guest.last_name) }}
+                                {{ form_row(form.guest.email) }}
+                            </div>
+                            <div class="col-6">
+                                {{ form_row(form.guest.first_name) }}
+                                {{ form_row(form.guest.phone_number) }}
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">Enregistrer</button>
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
